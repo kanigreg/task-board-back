@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'todos/create'
-  get 'todos/update'
   root to: 'projects#index'
 
-  resources :projects, only: :index
+  resources :projects, only: :index do
+    resources :todos, only: :update
+  end
+  resources :todos, only: :create
 end

@@ -5,7 +5,6 @@ class TodosControllerTest < ActionController::TestCase
     project = create(:project)
     attr = {
       text: generate(:string),
-      is_completed: false,
       project_id: project.id
     }
 
@@ -14,6 +13,23 @@ class TodosControllerTest < ActionController::TestCase
     end
 
     assert_response :created
+  end
+
+  test 'should not found' do
+    attr = { project_id: 2020 }
+
+    post :create, params: { todo: attr }
+
+    assert_response :not_found
+  end
+
+  test 'should bad request' do
+    project = create(:project)
+    attr = { project_id: project.id }
+
+    post :create, params: { todo: attr }
+
+    assert_response :bad_request
   end
 
   test 'should get update' do

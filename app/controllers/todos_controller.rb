@@ -1,21 +1,13 @@
 class TodosController < ApplicationController
   def create
-    project = Project.find(params[:todo][:project_id])
-
-    render status: :bad_request if project.nil?
-
-    todo = project.todos.new(todo_params)
-    todo.save
-
+    todo = Project.find(params[:todo][:project_id]).todos.new(todo_params)
+    todo.save!
     render status: :created, json: todo
   end
 
   def update
     todo = Todo.find(params[:id])
-
-    render status: :bad_request if todo.nil?
-
-    todo.update(todo_params)
+    todo.update!(todo_params)
     render json: todo
   end
 
