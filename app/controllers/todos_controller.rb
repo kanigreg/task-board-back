@@ -1,6 +1,10 @@
 class TodosController < ApplicationController
   def create
-    todo = Project.find(params[:todo][:project_id]).todos.new(todo_params)
+    project = Project.find_by_id(params[:todo][:project_id])
+    unless project
+      project = Project.create!({title: params[:project_title]})
+    end
+    todo = project.todos.new(todo_params)
     todo.save!
     render status: :created, json: todo
   end
