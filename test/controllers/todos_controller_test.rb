@@ -1,38 +1,41 @@
 require 'test_helper'
 
 class TodosControllerTest < ActionController::TestCase
-  test 'should get create' do
+  test 'should post create' do
     project = create(:project)
     attr = {
-      text: generate(:string),
-      project_id: project.id
+      text: generate(:string)
     }
 
     assert_changes -> { Todo.count } do
-      post :create, params: { todo: attr }
+      post :create, params: { project_title: project.title, todo: attr }
     end
 
     assert_response :created
   end
 
-  test 'should not found' do
-    attr = { project_id: 2020 }
+  test 'should post create in new project' do
+    project = create(:project)
+    attr = {
+      text: generate(:string)
+    }
 
-    post :create, params: { todo: attr }
+    assert_changes -> { Todo.count } do
+      post :create, params: { project_title: 'non-existent title', todo: attr }
+    end
 
-    assert_response :not_found
+    assert_response :created
   end
 
   test 'should bad request' do
     project = create(:project)
-    attr = { project_id: project.id }
 
-    post :create, params: { todo: attr }
+    post :create
 
     assert_response :bad_request
   end
 
-  test 'should get update' do
+  test 'should put update' do
     todo = create(:todo)
     attr = {
       text: generate(:string),
